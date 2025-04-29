@@ -1,15 +1,34 @@
-import React from "react";
+import { gql, useQuery } from "@apollo/client";
 import Item from "../Item";
 
-import data from "../../data";
+// import data from "../../data";
+
+const GET_CONTATOS = gql`
+  query {
+    contatos {
+      id
+      nome
+      email
+      telefone
+    }
+  }
+`;
+
+const ContainerContatos = ({ children }) => {
+  return <div className="contatos">{children}</div>;
+};
 
 function Contatos() {
+  const { loading, data } = useQuery(GET_CONTATOS);
+
+  if (loading) return <ContainerContatos>Carregando...</ContainerContatos>;
+
   return (
-    <div className="contatos">
-      {data.map((item, index) => (
+    <ContainerContatos>
+      {data.contatos.map((item, index) => (
         <Item key={index} item={item} />
       ))}
-    </div>
+    </ContainerContatos>
   );
 }
 
