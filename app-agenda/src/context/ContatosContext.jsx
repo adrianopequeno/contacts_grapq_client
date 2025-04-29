@@ -1,31 +1,34 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { createContext, useContext } from "react";
-import { ADD_CONTATO, GET_CONTATOS } from "../graphql";
+import { ADD_CONTATO, GET_CONTATOS, REMOVE_CONTATO } from "../graphql";
 
 const MyContext = createContext();
 
+const cacheCreate = {
+  update(cache, { data }) {
+    const newContatoResponse = data?.criarContato;
+    const existingContatos = cache.readQuery({ query: GET_CONTATOS });
+
+    cache.writeQuery({
+      query: GET_CONTATOS,
+      data: {
+        contatos: [...existingContatos.contatos, newContatoResponse],
+      },
+    });
+  },
+};
+
 export default function ContatosContextProvider({ children }) {
   const { data, loading, error } = useQuery(GET_CONTATOS);
-
-  const [criarContato] = useMutation(ADD_CONTATO, {
-    update(cache, { data }) {
-      const newContatoResponse = data?.criarContato;
-      const existingContatos = cache.readQuery({ query: GET_CONTATOS });
-
-      cache.writeQuery({
-        query: GET_CONTATOS,
-        data: {
-          contatos: [...existingContatos.contatos, newContatoResponse],
-        },
-      });
-    },
-  });
+  const [criarContato] = useMutation(ADD_CONTATO, cacheCreate);
+  const [deletarContato] = useMutation(REMOVE_CONTATO);
 
   const contatos = {
     itens: data?.contatos ?? [],
     loading,
     error,
     criarContato,
+    deletarContato,
   };
 
   return (

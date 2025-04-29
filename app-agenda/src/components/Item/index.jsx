@@ -1,11 +1,25 @@
+import { useContatosContext } from "../../context/ContatosContext";
+import { GET_CONTATOS } from "../../graphql";
+
 export default function Item({ item }) {
+  const { contatos } = useContatosContext();
+
   return (
     <div className="item">
       <h5 className="item-header">
         <a href="name" className="item-title">
           {item.nome}
         </a>
-        <button type="button" className="close">
+        <button
+          type="button"
+          className="close"
+          onClick={() =>
+            contatos.deletarContato({
+              variables: { id: item.id },
+              refetchQueries: [{ query: GET_CONTATOS }],
+            })
+          }
+        >
           <span>&times;</span>
         </button>
       </h5>

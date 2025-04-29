@@ -21,3 +21,9 @@ export const ADD_CONTATO = gql`
     }
   }
 `;
+
+export const REMOVE_CONTATO = gql`
+  mutation deletarContato($id: Int) {
+    deletarContato(filtro: { id: $id })
+  }
+`;
