@@ -2,12 +2,19 @@ import { useContatosContext } from "../../context/ContatosContext";
 import { GET_CONTATOS } from "../../graphql";
 
 export default function Item({ item }) {
-  const { contatos } = useContatosContext();
+  const { contatos, form } = useContatosContext();
 
   return (
     <div className="item">
       <h5 className="item-header">
-        <a href="name" className="item-title">
+        <a
+          href="name"
+          className="item-title"
+          onClick={(e) => {
+            e.preventDefault();
+            form.handleUpdate(item);
+          }}
+        >
           {item.nome}
         </a>
         <button

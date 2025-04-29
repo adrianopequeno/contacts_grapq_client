@@ -1,57 +1,24 @@
-import React, { useState } from "react";
 import { useContatosContext } from "../../context/ContatosContext";
 
-const valorInicial = { nome: "", email: "", telefone: "" };
-
 export default function Form() {
-  const { contatos } = useContatosContext();
-  const [inputs, setInputs] = useState(valorInicial);
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    contatos.criarContato({
-      variables: inputs,
-    });
-
-    console.log(inputs);
-    setInputs(valorInicial);
-  }
-
-  function handleChange(input) {
-    setInputs({ ...inputs, [input.target.name]: input.target.value });
-  }
+  const { form } = useContatosContext();
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={form.handleSubmit}>
       <div className="form-group">
         <label>Nome</label>
-        <input
-          type="text"
-          onChange={handleChange}
-          name="nome"
-          value={inputs.nome}
-        />
+        <input type="hidden" name="id" ref={form.refId} />
+        <input type="text" name="nome" ref={form.refNome} />
       </div>
 
       <div className="form-group">
         <label>E-mail</label>
-        <input
-          type="text"
-          onChange={handleChange}
-          name="email"
-          value={inputs.email}
-        />
+        <input type="text" name="email" ref={form.refEmail} />
       </div>
 
       <div className="form-group">
         <label>Telefone</label>
-        <input
-          type="text"
-          onChange={handleChange}
-          name="telefone"
-          value={inputs.telefone}
-        />
+        <input type="text" name="telefone" ref={form.refTelefone} />
       </div>
 
       <div className="form-group">
