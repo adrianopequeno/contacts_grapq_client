@@ -1,12 +1,18 @@
 import React, { useState } from "react";
+import { useContatosContext } from "../../context/ContatosContext";
 
 const valorInicial = { nome: "", email: "", telefone: "" };
 
 export default function Form() {
+  const { contatos } = useContatosContext();
   const [inputs, setInputs] = useState(valorInicial);
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    contatos.criarContato({
+      variables: inputs,
+    });
 
     console.log(inputs);
     setInputs(valorInicial);
